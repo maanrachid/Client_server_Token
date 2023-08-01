@@ -182,7 +182,8 @@ char checkandextractcooke(char *msg,char *cookie,char *hostname,char *uid){
   counter+=14;
 
   while(msg[counter]!=' '){
-    if (!isdigit(msg[counter]) || (counter > 50)) return 0;
+    // add some limit to the size of the msg 
+    if (!isdigit(msg[counter]) || (counter > 200)) return 0;
     cookie[counter1]=msg[counter];
     counter++,counter1++;
   }
