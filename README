@@ -1,0 +1,56 @@
+Maan Haj Rachid
+
+A homework written in 2002 in Networking class at Suffolk University.
+
+This is client-server project. The client sends a hello message to the server and the server answers with a status message. The client sends bye ,the server sends bye,all that using TCP.
+
+client: the program starts with some checking for arguments, their number and correctness. The "hostname" and "port" variables will carry the data anyway either from the command line or from the definition. Then a log file will be opened. The file's name is "clientlog", please note that it will delete the old contents of any file with that name each time you run the program.
+
+A message will be prepared in the "msg" variable. Then I open a socket, prepare a sock_addr struct "server" and feeding it with the data that I got from gethostbyname (address,port,family), then I connect, and start writing to the socket. Then I write to the log file all the required data. 
+
+Then I read from the socket and extract the cookie part of the message. I check if the message is legal. The checking is sensitive and I tested many times. but I didn't make a bad server for testing it, then I write the bye message to the socket and the data to the log file.  "buf is used for reading" then I read again from the socket .
+
+I am printing all the messages received from the server to the screen .
+I am sending the message rejected! if you send a bad request and the server rejected it .
+
+after bye stuff ,I am closing connection (I guess bye mean really bye here!). 
+
+to send a bad request using this client, you can do one the following :
+1- put a number in the first name
+2- put a number in the last name 
+3- put a non-digit and non-letter character in the user id
+
+I put these rules to make it possible to send something illegal using that good client 
+
+
+Now there is also a bad client , it is the same as the client with one difference that you enter the message yourself (hello or bye). the reason I didnt use that in the client is to make the good client easy to use instead of entering the data each time .  
+
+to run bad client ,use the same command for client with with word bad instead of client.:
+
+	bad [-h hostname:[port]] -u uid -f firstname -l lastname
+
+Server : some checking for the command line at the begining .and again "hostname and "port" will carry the information anyway .
+
+The log file is "serverlog" . open socket then bind it with a name that has all the information . I had difficulties that the system was rejecting my default port until I realize that the problem was that I wasn?t using ntohs function.
+
+I announce the port and the machine name . and listen.
+then I started an infinite loop for accepting connection with a sock_addr struct "client"  for the client to obtain the informations about the client. I got the address from the struct client ,then I got the host by the address (gethostbyaddr) then I got the name (I could not get the name from the struct directly).
+
+then I printed the data to the screen in a nice way . 
+
+then I started reading from the socket and writing to the log file.then the function checkandgetuid will check if the message is well formatted and extract the user name . if it is not formatted the procedure will be broken and connection will be cancelled . if it is ok a "msg" will be sent with a random cookie . the cookie is practically unique . of course ,writing to the log file is happenning anyway
+
+then read again ,check by the checkbye function to see if it is legal . and send back a message bye if the request is legal. and then announcing ending the connection .
+
+detecting an error is very sensitive ,I didnt put all the possible cases in the script file . but changing anything like spaces , cookie number will be detected .
+
+Performace: there is one case I didn't take care of and it is important . the client is able in the code to make the case miserable if you put an infinite  while loop after the connect . the server  will busy forever for nothing and our the clients will be the same . but I suppose that there is no such bad guy here 
+
+I also assume here that the cookie are absolutely unique. With a huge number of requests, that can be wrong. In the case, we need to store theses cookie in a linked lists to check them each time you generate a cookie. 
+
+I tested the project with more than 4 people successfully.
+
+Everything else is working smoothly and fast.   
+
+
+ 
